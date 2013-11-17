@@ -1,0 +1,21 @@
+Config { font = "xft:Anonymous Pro-8:regular"
+       , bgColor = "#212325"
+       , fgColor = "#FF0086"
+       , position = TopW L 100
+       , commands = [ 
+            Run Memory ["-t","<usedratio>"] 10
+            , Run Cpu ["-t<total>","-w 2","-c 0"] 10
+            , Run Date "%d/%m W%V" "date" 10
+            , Run Date "%d/%m" "dateNoWeek" 10
+            , Run Date "%H:%M"  "mydate" 10
+            , Run Date "%H:%M" "dateD" 10
+            , Run StdinReader
+            , Run Com "check_bat" [] "bbb" 10
+            , Run Com "ifmWatcher" [] "ifm" 10
+            , Run Com "xchatCheck" [] "xchat" 10
+            , Run Com "volumeReader" [] "vol" 10
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{%bbb% <icon=/home/amk/.icons/spkr_01.xbm/> %vol%%ifm% <icon=/home/amk/.icons/cpu.xbm/> %cpu% <icon=/home/amk/.icons/mem.xbm/> %memory% <icon=/home/amk/.icons/pacman.xbm/> %xchat% %dateNoWeek% <fc=#00FCFC>%mydate%</fc>"
+       }

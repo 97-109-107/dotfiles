@@ -1,0 +1,27 @@
+alias android-connect="mtpfs -o allow_other /media/LGVu"
+alias android-disconnect="fusermount -u /media/LGVu"
+alias ls='ls --color=auto'
+alias dir='dir --color=auto'
+alias vdir='vdir --color=auto'
+alias lsblk='lsblk -o NAME,LABEL,MOUNTPOINT,SIZE,UUID'
+alias ll="ls -lAGh --group-directories-first --time-style=+%d/%m' '%H:%M"
+alias r='ranger'
+alias cal='ncal -MC3'
+alias t='tail -f'
+alias ack='ack-grep -i'
+alias vi='vim'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias cd..='cd ..'
+alias ..='cd ..'
+alias ...='cd ../../../'
+alias ....='cd ../../../../'
+alias .....='cd ../../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../..'
+alias h='history'
+alias svi='sudo vi'
+alias edit='vim'
+alias cmus='cd ~/Downloads/; cmus'
+function tunnel() { ngrok -hostname tunnel.generativestuff.com "$@";}

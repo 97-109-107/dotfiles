@@ -1,0 +1,5 @@
+nnoremap j 7j
+nnoremap k 7k
+map b gt
+map B gT
+colorscheme snaka

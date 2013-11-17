@@ -1,0 +1,6 @@
+-- Import statements
+import XMonad
+ 
+-- Run XMonad with the defaults
+main = do
+    xmonad $ defaultConfig
