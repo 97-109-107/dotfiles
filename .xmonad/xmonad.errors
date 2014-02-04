@@ -1,13 +1,13 @@
 
-xmonad.hs:5:1: Warning:
+xmonad.hs:6:1: Warning:
     Module `XMonad.Hooks.ICCCMFocus' is deprecated:
       XMonad.Hooks.ICCCMFocus: xmonad>0.10 core merged issue 177
 
-xmonad.hs:210:5: Warning:
+xmonad.hs:214:5: Warning:
     Pattern match(es) are overlapped
     In an equation for `noScratchPad': noScratchPad ws = ...
 
-xmonad.hs:222:21: Warning:
+xmonad.hs:226:21: Warning:
     In the use of `takeTopFocus'
     (imported from XMonad.Hooks.ICCCMFocus):
     Deprecated: "XMonad.Hooks.ICCCMFocus: xmonad>0.10 core merged issue 177"

@@ -1,5 +1,6 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 import XMonad
+import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Actions.PhysicalScreens
 import XMonad.Layout.WindowNavigation
 import XMonad.Hooks.ICCCMFocus
@@ -117,6 +118,8 @@ kill8 ss | Just w <- W.peek ss = (W.insertUp w) $ W.delete w ss | otherwise = ss
 myManageHook = composeAll
    [ className =? "Rhythmbox" --> doShift "="
    , className =? "Xmessage"  --> doFloat
+   , className =? "Specto"  --> doFloat
+   , className =? "Zathura"  --> doFloat
    , className =? "Tomate"  --> doFloat
    , className =? "Gnucash"  --> doFloat
    , className =? "Lxrandr"  --> doFloat
@@ -125,6 +128,7 @@ myManageHook = composeAll
    , className =? "Calc"  --> doFloat
    , className =? "Pealauncher"  --> doFloat
    , className =? "Transmission-gtk"  --> doFloat
+   , className =? "Qalculate-gtk"  --> doFloat 
    , className =? "Wicd-client.py"  --> doFloat
    , className =? "Fatrat"  --> doFloat
    , className =? "com-install4j-runtime-launcher-Launcher"  --> doFloat
@@ -229,8 +233,24 @@ main = do
         `additionalMouseBindings` myMouse
 toggleOrViewNoSP = toggleOrDoSkip ["F1"] W.greedyView
 myKeys = [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
-  	    , ((mod4Mask,xK_c), kill)
+        --tmux splits
+        -- , ((mod1Mask, xK_space),  spawn "xdotool keyup space" >> spawn "xdotool key --clearmodifiers ctrl+b H")
+        -- , ((mod1Mask .|. shiftMask, xK_space),  spawn "xdotool keyup space" >> spawn "xdotool key --clearmodifiers ctrl+b V")
+        -- --move around windows
+        -- , ((mod1Mask , xK_j),  spawn "xdotool keyup j" >> spawn "xdotool key --clearmodifiers ctrl+b o")
+        -- , ((mod1Mask , xK_k),  spawn "xdotool keyup k" >> spawn "xdotool key --clearmodifiers ctrl+b O")
+        -- -- move panes
+        -- , ((mod1Mask .|. shiftMask, xK_j), spawn "xdotool keyup j" >> spawn "xdotool key --clearmodifiers ctrl+b braceright")
+        -- , ((mod1Mask .|. shiftMask, xK_k), spawn "xdotool keyup k" >> spawn "xdotool key --clearmodifiers ctrl+b braceleft")
+        -- -- switch panes
+        -- , ((mod1Mask, xK_1), spawn "xdotool keyup 1" >> spawn "xdotool key --clearmodifiers ctrl+b n")
+        -- , ((mod1Mask, xK_2), spawn "xdotool keyup 2" >> spawn "xdotool key --clearmodifiers ctrl+b p")
+        -- -- managing panes
+        -- , ((mod1Mask, xK_w), spawn "xdotool keyup w" >> spawn "xdotool key --clearmodifiers ctrl+b x")
+        -- , ((mod1Mask, xK_t), spawn "xdotool keyup t" >> spawn "xdotool key --clearmodifiers ctrl+b c")
+        -- end of tmux
         , ((mod4Mask, xK_r), spawn ("exec " ++ menuCmd))
+  	    , ((mod4Mask,xK_c), kill)
         , ((0, xK_Print), spawn "sleep 0.2; scrot -q 100 -e 'mv $f ~/Screenshots/'")
         , ((shiftMask, xK_Print), spawn "sleep 0.2; scrot -q 100 -s -e 'mv $f ~/Screenshots/'")
         , ((mod4Mask .|. shiftMask, xK_s), spawn "sublime_text")
@@ -246,6 +266,7 @@ myKeys = [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
         --, ((0                                     , xK_F7), spawn "xmacroplay \"$DISPLAY\" < /tmp/macro.x")
         , ((mod4Mask                              , xK_s), windows W.focusDown) -- %! Move focus to the next window
         , ((mod4Mask                              , xK_a), windows W.focusUp) -- %! Move focus to the next window
+        , ((mod1Mask                              , xK_Tab), windows W.focusUp) -- %! Move focus to the next window
         , ((mod1Mask                              , xK_l), windows W.focusUp) -- logout!
         , ((mod4Mask .|. shiftMask, xK_o)         , sendMessage $ Multi.Toggle REFLECTX) -- reflex layout horizontally
         , ((mod4Mask                              , 0xffc1), spawn "xscreensaver & xscreensaver-command -lock") --lock by f4!
@@ -253,6 +274,7 @@ myKeys = [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
         , ((shiftMask                             , xK_XF86Launch1), spawn "sudo pm-suspend") --sleep s!
         --, ((shiftMask .|. controlMask             , xK_b    ), spawn "anamnesis --browser")
         , ((mod4Mask  .|. shiftMask               , xK_e    ), spawn "xfce4-terminal -e ranger")
+        , ((mod4Mask  .|. controlMask               , xK_Return    ), spawn "xfce4-terminal --class \"mailVim\"")
         , ((mod4Mask  .|. shiftMask               , xK_l    ), spawn "sudo pm-hibernate")
         , ((mod4Mask  .|. shiftMask               , xK_u    ), spawn "sudo disk-manager")
         -- increase/decrease transparency
@@ -267,8 +289,8 @@ myKeys = [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
         --, ((0                                     , xK_XF86AudioRaiseVolume), spawn "amixer set Master 3dB+") -- volume up
         --, ((0                                     , xK_XF86AudioRaiseVolume), spawn "pacmd dump|awk \'$1~/set-sink-volume/{system (\"pacmd \"$1\" \"$2\" \"$3+2000)}\'") -- volume up
         --, ((0                                     , xK_XF86AudioLowerVolume), spawn "pacmd dump|awk \'$1~/set-sink-volume/{system (\"pacmd \"$1\" \"$2\" \"$3-2000)}\'") -- volume down
-        , ((0                                     , xK_XF86AudioRaiseVolume), spawn "pactl set-sink-volume 0 -- +3%") -- volume up
-        , ((0                                     , xK_XF86AudioLowerVolume), spawn "pactl set-sink-volume 0 -- -3%") -- volume down
+        , ((0                                     , xK_XF86AudioRaiseVolume), spawn "setVolPactl +3") -- volume up
+        , ((0                                     , xK_XF86AudioLowerVolume), spawn "setVolPactl -3") -- volume down
         --, ((0                                     , xK_XF86AudioMute), spawn "amixer -c0 sset Master toggle") -- volume up
         , ((0                                     , xK_XF86AudioMute), spawn "mute") -- volume up
         , ((mod4Mask .|. shiftMask                , xK_y), spawn "youtube-watch")
@@ -288,14 +310,6 @@ myKeys = [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
         [((controlMask .|. mod4Mask, k), windows $ f i)
               | (i, k) <- zip (workspaces defaultConfig) [xK_1..xK_9]
               , (f, m) <- [(W.view, 0), (W.shift, shiftMask), (copy, shiftMask .|. controlMask)]]
-        -- Alt+F1..F10 switches to workspace
-        -- (Alt is in a nicer location for the thumb than the Windows key,
-        -- and 1..9 keys are already in use by Firefox, irssi, ...)
-        -- ++
-        -- [ ((mod4Mask, k), windows $ W.greedyView i)
-        --     | (i, k) <- zip myWorkspaces workspaceKeys
-        -- ]
-        -- where workspaceKeys = [xK_F1 .. xK_F10]
 
 myMouse = [
          ((mod4Mask, button2)                    , (\w -> spawn "touchtoggle"))

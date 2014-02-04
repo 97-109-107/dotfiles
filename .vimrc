@@ -2,20 +2,23 @@ set nocompatible               " be iMproved
 filetype on                  " required!
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
+Bundle "bigfish/vim-js-context-coloring"
+Bundle 'tpope/vim-vinegar'
+Bundle "plasticboy/vim-markdown.git"
 Bundle 'rking/ag.vim' 
 Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'elzr/vim-json'
-Bundle 'tclem/vim-arduino'
+Bundle 'digitaltoad/vim-jade'
 Bundle 'jceb/vim-orgmode'
 Bundle 'xolox/vim-misc'
 Bundle 'gmarik/vundle'
-Bundle 'bling/vim-bufferline'
+" Bundle 'bling/vim-bufferline'
 Bundle 'hwrod/interactive-replace.git'
 Bundle 'kien/ctrlp.vim.git'
 Bundle 'scrooloose/syntastic'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'Valloric/YouCompleteMe'
-Bundle 'scrooloose/nerdtree.git'
+" Bundle 'scrooloose/nerdtree.git'
 " Bundle 'fholgado/minibufexpl.vim' 
 " Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'xolox/vim-session'
@@ -33,12 +36,15 @@ Bundle "tomtom/tcomment_vim.git"
 Bundle "mattn/zencoding-vim.git"
 Bundle "sophacles/vim-processing.git"
 Bundle "tpope/vim-fugitive"
+Bundle "vim-scripts/utl.vim"
 Bundle "wincent/Command-T"
 Bundle "sjbach/lusty.git"
 filetype plugin indent on     " required!
+filetype indent on 
 
 set noerrorbells visualbell t_vb=
 autocmd GUIEnter * set visualbell t_vb=
+autocmd Filetype gitcommit setlocal spell
 set syntax=on
 syntax enable
 let g:EasyMotion_leader_key = '<Leader><Leader>' 
@@ -66,10 +72,13 @@ set tw=0 fo=cqt wm=5
 set lbr
 set formatoptions=l
 "use tabs for identation of 2spaces width
-set noet ci pi sts=0 sw=2 ts=2
+" set noet ci pi sts=0 sw=4 ts=2
+set noexpandtab
+set shiftwidth=2
+set tabstop=2
 " "toggle search highlight with f3
 " nnoremap <F3> :set hlsearch!<CR>
-nnoremap <F3> :set wrap!<CR>
+nnoremap <F8> :set wrap!<CR>
 set guifont=Anonymous\ Pro\ 9
 " Make vim incompatbile to vi.
 set nocompatible
@@ -87,10 +96,10 @@ function! ToggleGUICruft()
     endif
 endfunction
 
-map <F11> <Esc>:call ToggleGUICruft()<cr>
-map <F12> <Esc>: TMiniBufExplorer<cr>
-noremap <F6> <Esc>:syntax sync fromstart<CR>
-inoremap <F6> <C-o>:syntax sync fromstart<CR>
+" map <F11> <Esc>:call ToggleGUICruft()<cr>
+" map <F12> <Esc>: TMiniBufExplorer<cr>
+" noremap <F6> <Esc>:syntax sync fromstart<CR>
+" inoremap <F6> <C-o>:syntax sync fromstart<CR>
 
 " More Common Settings.
 set clipboard=unnamedplus
@@ -273,8 +282,15 @@ endif
 
 
 " ========== Plugin Settings =========="
-map <F2> :NERDTreeToggle<cr>
-map <F1> :CtrlP<cr>
+" map <F2> :NERDTreeToggle<cr>
+map <F1> :LustyBufferExplorer<cr>
+map <F2> :LustyFilesystemExplorerFromHere<cr>
+map <F3> :LustyBufferGrep<cr>
+map <F6> :JSContextColorToggle<cr>
+" CtrlP settings
+let g:ctrlp_match_window = 'bottom,order:ttb'
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_user_command = 'ag %s -l -g ""'
 " bufferline settings:
 let g:bufferline_show_bufnr = 0
 let g:bufferline_active_buffer_left= '✶ '
@@ -354,3 +370,9 @@ let g:session_autosave=0
 " make tabs look cli
 set guioptions-=e
 set autochdir
+" detect filetype automatically
+filetype plugin indent on
+" open ag.vim
+" disable context colors on start and it's keyboard mapping
+let g:js_context_colors_enabled = 0
+let g:js_context_colors_usemaps = 0

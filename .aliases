@@ -1,3 +1,7 @@
+alias myip='sudo ifconfig | ag "inet add" | tail -n 1 | awk "{ print $2 }" | cut -c6-100'
+alias tma='tmux attach -d -t'
+alias lolcommit='lolcommits --last'
+alias git-tmux='tmux new -s $(basename $(pwd))'
 alias android-connect="mtpfs -o allow_other /media/LGVu"
 alias android-disconnect="fusermount -u /media/LGVu"
 alias ls='ls --color=auto'
@@ -24,4 +28,7 @@ alias h='history'
 alias svi='sudo vi'
 alias edit='vim'
 alias cmus='cd ~/Downloads/; cmus'
+function ackk() {ack -B 3 -A 3 "$@";}
+funciotn agg() {ag -B 3 -A 3 "$@";}
+funciotn grepp() {grep -B 3 -A 3 "$@";}
 function tunnel() { ngrok -hostname tunnel.generativestuff.com "$@";}

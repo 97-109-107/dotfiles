@@ -3,3 +3,7 @@ nnoremap k 7k
 map b gt
 map B gT
 colorscheme snaka
+set! javascript.options.jit.chrome=true
+set complete=l
+noremap <C-a> <C-v><C-a>
+command! sourcerc :source ~/.vimperatorrc

@@ -46,3 +46,31 @@ plugins=(git z vi-mode themes colored-man dircycle history-substring-search zsh-
 source $ZSH/oh-my-zsh.sh
 
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then exec startx; fi
+
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.history
+APPEND_HISTORY=true
+INC_APPEND_HISTORY=true
+SHARE_HISTORY=true
+KEYTIMEOUT=1
+
+function apt-history(){
+      case "$1" in
+        install)
+              cat /var/log/dpkg.log | grep 'install '
+              ;;
+        upgrade|remove)
+              cat /var/log/dpkg.log | grep $1
+              ;;
+        rollback)
+              cat /var/log/dpkg.log | grep upgrade | \
+                  grep "$2" -A10000000 | \
+                  grep "$3" -B10000000 | \
+                  awk '{print $4"="$5}'
+              ;;
+        *)
+              cat /var/log/dpkg.log
+              ;;
+      esac
+}
