@@ -67,23 +67,22 @@ myNumlockMask = mod2Mask
 -- myWorkspaces = map show [1..9]++ ["chat","mail"] 
 -- myWorkspaces = map show [1..9]
 myWorkspaces = ["1","2","3","4","5","6","7","8","9", ""," ","  "]
+
 -- colors
-colorA="#212325" --gray
--- colorB="#00E1B3" --mint
--- colorC="#FFFF9A" --vanilla
+colorFG="#e8e8e8" --mint
+colorA="#00E1B3" --mint
+colorB="#FFFF9A" --vanilla
+colorBCG="#111" --vanilla
 
-colorC = "#00FCFC" --mint
-colorB = "#FF0086" --vanilla
-
-myNormalBorderColor = colorA
-myFocusedBorderColor = colorB
+myNormalBorderColor = "#222"
+myFocusedBorderColor = "#999"
 myNormalBg = colorA
-myNormalFg = colorC
+myNormalFg = colorB
 myFocusedBg = colorA
-myFocusedFg = colorC
+myFocusedFg = colorB
 myFont = "Anonymous Pro-*-*-*-*-*-13-*-*-*-*-*-*-*"
 
-menuCmd = "dmenu_run -i -fn '" ++ myFont ++ "' -nb '" ++ myNormalBg ++ "' -nf '" ++ myNormalFg ++ "' -sb '" ++ myFocusedBg ++ "' -sf '" ++ myFocusedFg ++ "'"
+menuCmd = "dmenu_run -i -fn '" ++ myFont ++ "' -nb '" ++ colorBCG ++ "' -nf '" ++ colorFG ++ "' -sb '" ++ colorBCG ++ "' -sf '" ++ colorA ++ "'"
 
 combo = reflectHoriz $ combineTwo (TwoPane 0.03 0.7) (Dishes 1 (2/5)) (Full)
 --combo = reflectHoriz $ combineTwo (TwoPane 0.03 0.7) (Mirror (magnifier (Tall 1 (3/100)(3/5)))(Full)
@@ -98,7 +97,6 @@ nethack = (combineTwo (TwoPane (1/100) (2/3)) (spacing 20 $ tiled) (spacing 20 $
       nmaster = 1
       delta = 3/100
       ratio = 3/5
-golden = smartBorders(maximize(spiral (toRational (2/(1 + sqrt 5 :: Double)))))
       --ratio = toRational (2/(1 + sqrt 5 :: Double)) -- golden ratio
 
 myLayout = avoidStruts( 
@@ -110,12 +108,13 @@ myLayout = avoidStruts(
            -- onWorkspaces ["4"] Circle $
            --onWorkspaces ["2"] golden $
            -- Tog.toggleLayouts Full (smartBorders(maximize(tiled ||| Mirror tiled ||| ThreeColMid 1 (3/100) (1/2) ||| Circle ||| spiral (13/20) )))) 
-           Tog.toggleLayouts Full (smartBorders(maximize(tiled ||| Mirror tiled ||| ThreeColMid 1 (3/100) (1/2) ||| Circle ||| dishes )))) 
+           Tog.toggleLayouts Full (smartBorders(maximize(tiled ||| golden ||| Mirror tiled ||| ThreeColMid 1 (3/100) (1/2) ||| Circle ||| dishes )))) 
   where 
       tiled = Tall nmaster delta ratio
       nmaster = 1
       delta = 3/100
       ratio = 3/5
+      golden = smartBorders(maximize(spiral (toRational (2/(1 + sqrt 5 :: Double)))))
 
 kill8 ss | Just w <- W.peek ss = (W.insertUp w) $ W.delete w ss | otherwise = ss
 
@@ -209,25 +208,14 @@ anamedScratchpadFilterOutWorkspacePP pp = pp {
 --                , ppExtras          = []
 --                }
 myLogHook = xmobarPP{ 
-     ppTitle = xmobarColor colorC"" . shorten 152
-    , ppLayout = const "" -- to disable the layout info on xmobar  
-    -- display current workspace as darkgrey on light grey (opposite of 
-        -- default colors)
-    , ppCurrent = xmobarColor colorC"" . wrap "" ""
-    -- display other workspaces which contain windows as a brighter grey
-    --, ppHidden          = xmobarColor "#909090"""
-    -- display other workspaces with no windows as a normal grey
-    --, ppHiddenNoWindows = "#606060" "" 
-    , ppSort            = getSortByIndex
-    , ppHiddenNoWindows = xmobarColor colorA""
-    -- if a window on a hidden workspace needs my attention, color it so
-    , ppUrgent          = xmobarColor "#ffffff"""
+     ppTitle            = xmobarColor colorA"" . shorten 152
+    , ppCurrent         = xmobarColor colorA"" . wrap "" ""
+    , ppHidden          = xmobarColor colorFG"" . wrap "" "" 
+    , ppHiddenNoWindows = xmobarColor colorBCG"" . wrap "" "" 
     , ppWsSep           = ""
-    -- , ppSort = fmap (.anamedScratchpadFilterOutWorkspace) $ ppSort defaultPP
-    -- , ppHidden = noScratchPad
-    -- put a few spaces between each object
-    , ppSep             = "  "
-    -- output to the handle we were given as an argument
+    , ppSep             = ""
+    , ppSort            = getSortByIndex
+    , ppLayout          = const "" 
     } 
     where
     noScratchPad ws = if ws == "im" then "" else ws
