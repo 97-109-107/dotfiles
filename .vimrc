@@ -2,43 +2,53 @@ set nocompatible               " be iMproved
 filetype on                  " required!
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
-Bundle "bigfish/vim-js-context-coloring"
-Bundle 'tpope/vim-vinegar'
-Bundle "plasticboy/vim-markdown.git"
-Bundle 'rking/ag.vim' 
-Bundle 'kien/rainbow_parentheses.vim'
-Bundle 'elzr/vim-json'
-Bundle 'digitaltoad/vim-jade'
-Bundle 'jceb/vim-orgmode'
-Bundle 'xolox/vim-misc'
-Bundle 'gmarik/vundle'
-" Bundle 'bling/vim-bufferline'
-Bundle 'hwrod/interactive-replace.git'
-Bundle 'kien/ctrlp.vim.git'
-Bundle 'scrooloose/syntastic'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'Valloric/YouCompleteMe'
-" Bundle 'scrooloose/nerdtree.git'
-" Bundle 'fholgado/minibufexpl.vim' 
-" Bundle 'jistr/vim-nerdtree-tabs'
-Bundle 'xolox/vim-session'
-Bundle 'lilydjwg/colorizer'
-Bundle "mileszs/ack.vim.git"
+" Bundle 'FredKSchott/CoVim'
+" Bundle 'Lokaltog/vim-easymotion'
 " Bundle 'Lokaltog/vim-powerline'
-Bundle "bling/vim-airline"
-Bundle 'Townk/vim-autoclose'
-Bundle 'mbadran/headlights'
-Bundle "vim-scripts/JavaScript-syntax.git"
+" Bundle 'bling/vim-airline'
+" Bundle 'bling/vim-bufferline'
+" Bundle 'fholgado/minibufexpl.vim' 
+" Bundle 'jceb/vim-orgmode'
+" Bundle 'jistr/vim-nerdtree-tabs'
+" Bundle 'tpope/vim-vinegar'
+Bundle "beloglazov/vim-online-thesaurus"
+Bundle "bigfish/vim-js-context-coloring"
+Bundle "itchyny/lightline.vim"
+Bundle "krisajenkins/vim-pipe"
+Bundle "mattn/zencoding-vim.git"
+Bundle "mileszs/ack.vim.git"
+Bundle "plasticboy/vim-markdown.git"
+Bundle "sjbach/lusty.git"
+Bundle "sophacles/vim-processing.git"
+Bundle "tomtom/tcomment_vim.git" 
+Bundle "tpope/vim-fugitive"
+Bundle "tpope/vim-repeat"
+Bundle "tpope/vim-surround.git"
 Bundle "vim-scripts/BufOnly.vim"
 Bundle "vim-scripts/Gundo.git"
-Bundle "tpope/vim-surround.git"
-Bundle "tomtom/tcomment_vim.git" 
-Bundle "mattn/zencoding-vim.git"
-Bundle "sophacles/vim-processing.git"
-Bundle "tpope/vim-fugitive"
+Bundle "vim-scripts/JavaScript-syntax.git"
+Bundle "maxbrunsfeld/vim-yankstack"
 Bundle "vim-scripts/utl.vim"
+Bundle "vim-scripts/vimoutliner-colorscheme-fix"
 Bundle "wincent/Command-T"
-Bundle "sjbach/lusty.git"
+Bundle 'Townk/vim-autoclose'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'digitaltoad/vim-jade'
+Bundle 'elzr/vim-json'
+Bundle 'gmarik/vundle'
+Bundle 'groenewege/vim-less'
+Bundle 'hwrod/interactive-replace.git'
+" Bundle 'kien/ctrlp.vim.git'
+Bundle 'kien/rainbow_parentheses.vim'
+Bundle 'lilydjwg/colorizer'
+Bundle 'mbadran/headlights'
+Bundle 'nono/vim-handlebars'
+Bundle 'rking/ag.vim' 
+Bundle 'scrooloose/nerdtree.git'
+Bundle 'scrooloose/syntastic'
+Bundle 'vimoutliner/vimoutliner'
+Bundle 'xolox/vim-misc'
+Bundle 'xolox/vim-session'
 filetype plugin indent on     " required!
 filetype indent on 
 
@@ -48,9 +58,8 @@ autocmd Filetype gitcommit setlocal spell
 set syntax=on
 syntax enable
 let g:EasyMotion_leader_key = '<Leader><Leader>' 
- let g:tcommentMapLeaderOp1='<Leader>'
+let g:tcommentMapLeaderOp1=','
 
-" ZoMbie 
 " setting scroll offset
 set scrolloff=1
 " add jumping between last edited lines
@@ -65,6 +74,13 @@ nnoremap <M-.> :call search('^'. matchstr(getline(line('.')), '\(\s*\)') .'\S')<
 " jump lines while beeing in the middle
 nnoremap <M-j> 6jzz
 nnoremap <M-k> 6kzz
+
+
+nnoremap <TAB> >>
+nnoremap <S-TAB> <<
+vnoremap <TAB> >gv
+vnoremap <S-TAB> <gv
+
 " call gundo
 nnoremap <M-u> :GundoToggle<cr>
 " some nice linebreaking?
@@ -79,7 +95,7 @@ set tabstop=2
 " "toggle search highlight with f3
 " nnoremap <F3> :set hlsearch!<CR>
 nnoremap <F8> :set wrap!<CR>
-set guifont=Anonymous\ Pro\ 9
+set guifont=Anonymous\ Pro\ 9.1
 " Make vim incompatbile to vi.
 set nocompatible
 set modelines=0
@@ -109,10 +125,14 @@ set autoindent
 set showmode
 set showcmd
 set hidden
+set history=1000
 set wildmenu
 set wildmode=list:longest
 set visualbell
-
+set showbreak=.....
+set thesaurus+=/home/amk/.vim/thesaurus/mthesaur.txt
+" he % key will switch between opening and closing brackets. By sourcing matchit.vim — a standard file in Vim installations for years — the key can also switch among e.g. if/elsif/else/end, between opening and closing XML tags, and more. 
+runtime macros/matchit.vim
 "set cursorline
 set ttyfast
 set ruler
@@ -136,6 +156,8 @@ noremap <silent> <C-S>          :update<CR>
 vnoremap <silent> <C-S>         <C-C>:update<CR>
 inoremap <silent> <C-S>         <C-O>:update<CR>
 
+" replace stuff with r in visual seclection mode;
+vmap r "_dP 
 " resize current buffer by +/- 5 
 nnoremap <A-left> :vertical resize -5<cr>
 nnoremap <A-right> :vertical resize +5<cr>
@@ -167,14 +189,11 @@ set incsearch
 set showmatch
 set hlsearch
 nnoremap <leader><space> :noh<cr>
-nnoremap <tab> %
-vnoremap <tab> %
 
 " Make Vim to handle long lines nicely.
 set wrap
-set textwidth=79
+set textwidth=80
 set formatoptions=qrn1
-"set column=79
 
 " To  show special characters in Vim
 "set list
@@ -238,6 +257,10 @@ nmap <leader>s<right>  :rightbelow vnew<CR>
 nmap <leader>s<up>     :leftabove  new<CR>
 nmap <leader>s<down>   :rightbelow new<CR>
 
+" set backups to be not polluting dir
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+
 " Wildmenu completion "
 set wildmenu
 set wildmode=list:longest
@@ -282,15 +305,15 @@ endif
 
 
 " ========== Plugin Settings =========="
-" map <F2> :NERDTreeToggle<cr>
+map <A-S-k> :NERDTreeToggle<cr>
 map <F1> :LustyBufferExplorer<cr>
 map <F2> :LustyFilesystemExplorerFromHere<cr>
 map <F3> :LustyBufferGrep<cr>
 map <F6> :JSContextColorToggle<cr>
 " CtrlP settings
-let g:ctrlp_match_window = 'bottom,order:ttb'
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_user_command = 'ag %s -l -g ""'
+" let g:ctrlp_match_window = 'bottom,order:ttb'
+" let g:ctrlp_working_path_mode = 0
+" let g:ctrlp_user_command = 'ag %s -l -g ""'
 " bufferline settings:
 let g:bufferline_show_bufnr = 0
 let g:bufferline_active_buffer_left= '✶ '
@@ -345,8 +368,8 @@ nmap <silent> <C-h> :wincmd h<CR>
 nmap <silent> <C-j> :wincmd j<CR>
 nmap <silent> <C-k> :wincmd k<CR>
 nmap <silent> <C-l> :wincmd l<CR>
-map <silent><C-Tab> :bnext<cr>
-map <silent><C-S-Tab> :bprevious<cr>
+"map <silent><C-Tab> :bnext<cr>
+"map <silent><C-S-Tab> :bprevious<cr>
 " tab navigation like firefox
 nnoremap <silent><A-1>   :tabprevious<CR>
 nnoremap <silent><A-2> :tabnext<CR>
@@ -365,8 +388,9 @@ let g:airline_detect_whitespace=0
 let g:airline#extensions#whitespace#show_message = 0
 let g:airline_exclude_preview = 0
 " xolox session settings
-let g:session_autoload=0
-let g:session_autosave=0
+let g:session_autoload='yes'
+let g:session_autosave=0 
+let g:session_default_to_last=1
 " make tabs look cli
 set guioptions-=e
 set autochdir
@@ -376,3 +400,118 @@ filetype plugin indent on
 " disable context colors on start and it's keyboard mapping
 let g:js_context_colors_enabled = 0
 let g:js_context_colors_usemaps = 0
+" Enable spell checking for markdown files
+au BufRead *.md setlocal spell
+au BufRead *.markdown setlocal spell
+let CoVim_default_name = "amk"
+let CoVim_default_port = "1666"  
+let g:lightline = {
+      \ 'mode_map': { 'c': 'NORMAL' },
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+      \ },
+      \ 'component_function': {
+      \   'modified': 'MyModified',
+      \   'readonly': 'MyReadonly',
+      \   'fugitive': 'MyFugitive',
+      \   'filename': 'MyFilename',
+      \   'fileformat': 'MyFileformat',
+      \   'filetype': 'MyFiletype',
+      \   'fileencoding': 'MyFileencoding',
+      \   'mode': 'MyMode',
+      \ },
+      \ 'separator': { 'left': '⮀', 'right': '⮂' },
+      \ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+      \ }
+
+let g:lightline.tabline = {
+      \ 'left': [ [ 'tabs' ] ],
+      \ 'right': [ [ '' ] ] }
+
+function! MyModified()
+  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+
+function! MyReadonly()
+  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '⭤' : ''
+endfunction
+
+function! MyFilename()
+  return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
+        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() : 
+        \  &ft == 'unite' ? unite#get_status_string() : 
+        \  &ft == 'vimshell' ? vimshell#get_status_string() :
+        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' != MyModified() ? ' ' . MyModified() : '')
+endfunction
+
+function! MyFugitive()
+  if &ft !~? 'vimfiler\|gundo' && exists("*fugitive#head")
+    let _ = fugitive#head()
+    return strlen(_) ? '⭠ '._ : ''
+  endif
+  return ''
+endfunction
+
+function! MyFileformat()
+  return winwidth(0) > 70 ? &fileformat : ''
+endfunction
+
+function! MyFiletype()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+endfunction
+
+function! MyFileencoding()
+  return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+endfunction
+
+function! MyMode()
+  return winwidth(0) > 60 ? lightline#mode() : ''
+endfunction
+
+function! VO2MD()
+  let lines = []
+  let was_body = 0
+  for line in getline(1,'$')
+    if line =~ '^\t*[^:\t]'
+      let indent_level = len(matchstr(line, '^\t*'))
+      if was_body " <= remove this line to have body lines separated
+        call add(lines, '')
+      endif " <= remove this line to have body lines separated
+      call add(lines, substitute(line, '^\(\t*\)\([^:\t].*\)', '\=repeat("#", indent_level + 1)." ".submatch(2)', ''))
+      call add(lines, '')
+      let was_body = 0
+    else
+      call add(lines, substitute(line, '^\t*: ', '', ''))
+      let was_body = 1
+    endif
+  endfor
+  silent %d _
+  call setline(1, lines)
+endfunction
+
+function! MD2VO()
+  let lines = []
+  for line in getline(1,'$')
+    if line =~ '^\s*$'
+      continue
+    endif
+    if line =~ '^#\+'
+      let indent_level = len(matchstr(line, '^#\+')) - 1
+      call add(lines, substitute(line, '^#\(#*\) ', repeat("\<Tab>", indent_level), ''))
+    else
+      call add(lines, substitute(line, '^', repeat("\<Tab>", indent_level) . ': ', ''))
+    endif
+  endfor
+  silent %d _
+  call setline(1, lines)
+endfunction
+
+" disable vim-markdown force-folds
+let g:vim_markdown_initial_foldlevel=1
+let g:vim_markdown_folding_disabled=1
+"yankStack
+let g:yankstack_map_keys = 0
+nmap <C-P> <plug>yankstack_substitute_older_paste
+nmap <C-N> <plug>yankstack_substitute_newer_paste

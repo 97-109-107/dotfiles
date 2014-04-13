@@ -4,6 +4,7 @@ import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Actions.PhysicalScreens
 import XMonad.Layout.WindowNavigation
 import XMonad.Hooks.ICCCMFocus
+-- import XMonad.Util.Scratchpad
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Spacing
 import XMonad.Layout.StackTile
@@ -65,11 +66,11 @@ myModMask = mod4Mask
 myNumlockMask = mod2Mask
 -- myWorkspaces = map show [1..9]++ ["chat","mail"] 
 -- myWorkspaces = map show [1..9]
-myWorkspaces = ["1","2","3","4","5","6","7","8","9", ""," "]
+myWorkspaces = ["1","2","3","4","5","6","7","8","9", ""," ","  "]
 -- colors
-colorA = "#212325" --gray
---colorB = "#00E1B3" --mint
---colorC = "#FFFF9A" --vanilla
+colorA="#212325" --gray
+-- colorB="#00E1B3" --mint
+-- colorC="#FFFF9A" --vanilla
 
 colorC = "#00FCFC" --mint
 colorB = "#FF0086" --vanilla
@@ -90,6 +91,7 @@ combo = reflectHoriz $ combineTwo (TwoPane 0.03 0.7) (Dishes 1 (2/5)) (Full)
 --combo = combineTwo (TwoPane delta ratio) (Mirror tiled) (Circle)
 --nethack = (combineTwo (TwoPane (1/100) (147/227)) (Mirror (ResizableTall 1 (1/100) (3/4) [])) (Dishes 1 (1/6)))
 --nethack = (combineTwo (TwoPane (1/100) (2/3)) (simpleCross) (simpleCross))
+dishes = StackTile 1 (3/100) (1/2) 
 nethack = (combineTwo (TwoPane (1/100) (2/3)) (spacing 20 $ tiled) (spacing 20 $ tiled))
   where 
       tiled = Tall nmaster delta ratio
@@ -104,9 +106,11 @@ myLayout = avoidStruts(
            --onWorkspaces [" "] simpleCross $
            -- onWorkspaces [" "] nethack $
            onWorkspaces [" "] combo $
+           onWorkspaces ["  "] dishes $
            -- onWorkspaces ["4"] Circle $
            --onWorkspaces ["2"] golden $
-           Tog.toggleLayouts Full (smartBorders(maximize(tiled ||| Mirror tiled ||| ThreeColMid 1 (3/100) (1/2) ||| Circle ||| spiral (13/20) )))) 
+           -- Tog.toggleLayouts Full (smartBorders(maximize(tiled ||| Mirror tiled ||| ThreeColMid 1 (3/100) (1/2) ||| Circle ||| spiral (13/20) )))) 
+           Tog.toggleLayouts Full (smartBorders(maximize(tiled ||| Mirror tiled ||| ThreeColMid 1 (3/100) (1/2) ||| Circle ||| dishes )))) 
   where 
       tiled = Tall nmaster delta ratio
       nmaster = 1
@@ -120,6 +124,8 @@ myManageHook = composeAll
    , className =? "Xmessage"  --> doFloat
    , className =? "Specto"  --> doFloat
    , className =? "Zathura"  --> doFloat
+   , className =? "Tilda"  --> doFloat
+   , className =? "Yakuake"  --> doFloat
    , className =? "Tomate"  --> doFloat
    , className =? "Gnucash"  --> doFloat
    , className =? "Lxrandr"  --> doFloat
@@ -138,6 +144,7 @@ myManageHook = composeAll
    , className =? "processing-app-Base"  --> doFloat
    , className =? "feh"  --> doFloat
    , className =? "Smplayer"  --> doFloat
+   , className =? "Zenity"  --> doFloat
    , className =? "Minitube"  --> doFloat
    , className =? "Ssvnc.tcl"  --> doFloat
    , className =? "Clipit"  --> doFloat
@@ -160,6 +167,18 @@ myManageHook = composeAll
    , title =? "Select file"      --> doFloat
    , manageDocks
    ]
+   -- <+> manageScratchPad
+
+-- manageScratchPad :: ManageHook
+-- manageScratchPad = scratchpadManageHook (W.RationalRect l t w h)
+
+  where
+
+    h = 0.1     -- terminal height, 10%
+    w = 1       -- terminal width, 100%
+    t = 1 - h   -- distance from top edge, 90%
+    l = 1 - w   -- distance from left edge, 0%
+
 -- tag of the scratchpad workspace
 scratchpadWorkspaceTag :: String
 scratchpadWorkspaceTag = "chat"
@@ -220,6 +239,7 @@ main = do
         { manageHook = myManageHook <+> manageHook defaultConfig
         , layoutHook = mkToggle (single REFLECTX) $ myLayout 
         , workspaces = myWorkspaces
+        , terminal = myTerminal
         , normalBorderColor  = myNormalBorderColor
         , focusedBorderColor = myFocusedBorderColor
         --, logHook = fadeInactiveLogHook 0xdddddddd >> dynamicLogWithPP xmobarPP
@@ -262,6 +282,8 @@ myKeys = [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
         --, ((0                                     , xK_F7), spawn "cnee --replay -f /tmp/macro.xnr")
         --, ((mod4Mask                              , xK_F7), spawn "cnee --record -smp --events-to-record 10 -o /tmp/macro.xnr --keyboard; notify-send 'macro recorded'")
         --, ((0 , xK_F7),runInTerm "" "xmacrorec -k 24 > /tmp/macro.x")
+        , ((mod4Mask                              , xK_p), spawn "webrf refresh")
+        , ((mod4Mask  .|. shiftMask               , xK_p), spawn "webrf setup")
         --, ((0                                     , xK_F6), spawn "xmacrorec -k 24 > /tmp/macro.x")
         --, ((0                                     , xK_F7), spawn "xmacroplay \"$DISPLAY\" < /tmp/macro.x")
         , ((mod4Mask                              , xK_s), windows W.focusDown) -- %! Move focus to the next window
@@ -273,8 +295,8 @@ myKeys = [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
         , ((0                                     , xK_XF86Launch1), spawn "xscreensaver & xscreensaver-command -lock") --lock by f4!
         , ((shiftMask                             , xK_XF86Launch1), spawn "sudo pm-suspend") --sleep s!
         --, ((shiftMask .|. controlMask             , xK_b    ), spawn "anamnesis --browser")
-        , ((mod4Mask  .|. shiftMask               , xK_e    ), spawn "xfce4-terminal -e ranger")
-        , ((mod4Mask  .|. controlMask               , xK_Return    ), spawn "xfce4-terminal --class \"mailVim\"")
+        -- , ((mod4Mask  .|. shiftMask               , xK_e    ), spawn "xfce4-terminal -e ranger")
+        -- , ((mod4Mask  .|. controlMask               , xK_Return    ), spawn "xfce4-terminal --class \"mailVim\"")
         , ((mod4Mask  .|. shiftMask               , xK_l    ), spawn "sudo pm-hibernate")
         , ((mod4Mask  .|. shiftMask               , xK_u    ), spawn "sudo disk-manager")
         -- increase/decrease transparency
@@ -289,11 +311,14 @@ myKeys = [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
         --, ((0                                     , xK_XF86AudioRaiseVolume), spawn "amixer set Master 3dB+") -- volume up
         --, ((0                                     , xK_XF86AudioRaiseVolume), spawn "pacmd dump|awk \'$1~/set-sink-volume/{system (\"pacmd \"$1\" \"$2\" \"$3+2000)}\'") -- volume up
         --, ((0                                     , xK_XF86AudioLowerVolume), spawn "pacmd dump|awk \'$1~/set-sink-volume/{system (\"pacmd \"$1\" \"$2\" \"$3-2000)}\'") -- volume down
-        , ((0                                     , xK_XF86AudioRaiseVolume), spawn "setVolPactl +3") -- volume up
-        , ((0                                     , xK_XF86AudioLowerVolume), spawn "setVolPactl -3") -- volume down
+        -- , ((0                                     , xK_XF86AudioRaiseVolume), spawn "setVolPactl +3") -- volume up
+        -- , ((0                                     , xK_XF86AudioLowerVolume), spawn "setVolPactl -3") -- volume down
         --, ((0                                     , xK_XF86AudioMute), spawn "amixer -c0 sset Master toggle") -- volume up
-        , ((0                                     , xK_XF86AudioMute), spawn "mute") -- volume up
+        , ((0                                     , xK_XF86AudioRaiseVolume), spawn "pactl set-sink-volume 0 -- +3%; pactl set-sink-volume 1 -- +3%") -- volume up
+        , ((0                                     , xK_XF86AudioLowerVolume), spawn "pactl set-sink-volume 0 -- -3%; pactl set-sink-volume 1 -- -3%") -- volume down
+        , ((0                                     , xK_XF86AudioMute), spawn "pactl set-sink-mute 0 toggle;pactl set-sink-mute 1 toggle") -- volume up
         , ((mod4Mask .|. shiftMask                , xK_y), spawn "youtube-watch")
+        -- , ((mod4Mask .|. shiftMask                , xK_t), scratchpadSpawnActionTerminal myTerminal )
         , ((mod4Mask .|. shiftMask, xK_space)     , sendMessage (Tog.ToggleLayout))
        -- >    , ((modm .|. controlMask .|. shiftMask, xK_Right), sendMessage $ Move R)
        , ((mod4Mask .|. controlMask .|. shiftMask, xK_Left ), sendMessage $ Move L)
@@ -303,13 +328,15 @@ myKeys = [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
        , ((mod4Mask, xK_u), onPrevNeighbour W.view)
        , ((mod4Mask, xK_i), onNextNeighbour W.view)
         ] ++
-        zip (zip (repeat mod4Mask) [xK_F1..xK_F2]) (map (withNthWorkspace W.greedyView) [9..])
+        zip (zip (repeat mod4Mask) [xK_F1..xK_F3]) (map (withNthWorkspace W.greedyView) [9..])
         ++
-        zip (zip (repeat (mod4Mask .|. mod1Mask)) [xK_F1..xK_F2]) (map (withNthWorkspace W.shift) [9..])
+        zip (zip (repeat (mod4Mask .|. mod1Mask)) [xK_F1..xK_F3]) (map (withNthWorkspace W.shift) [9..])
         ++
         [((controlMask .|. mod4Mask, k), windows $ f i)
               | (i, k) <- zip (workspaces defaultConfig) [xK_1..xK_9]
               , (f, m) <- [(W.view, 0), (W.shift, shiftMask), (copy, shiftMask .|. controlMask)]]
+
+myTerminal = "roxterm"
 
 myMouse = [
          ((mod4Mask, button2)                    , (\w -> spawn "touchtoggle"))

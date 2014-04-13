@@ -32,3 +32,4 @@ function ackk() {ack -B 3 -A 3 "$@";}
 funciotn agg() {ag -B 3 -A 3 "$@";}
 funciotn grepp() {grep -B 3 -A 3 "$@";}
 function tunnel() { ngrok -hostname tunnel.generativestuff.com "$@";}
+alias ccat='pygmentize -g'
