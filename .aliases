@@ -28,8 +28,51 @@ alias h='history'
 alias svi='sudo vi'
 alias edit='vim'
 alias cmus='cd ~/Downloads/; cmus'
+alias ccat='pygmentize -g'
 function ackk() {ack -B 3 -A 3 "$@";}
 funciotn agg() {ag -B 3 -A 3 "$@";}
 funciotn grepp() {grep -B 3 -A 3 "$@";}
 function tunnel() { ngrok -hostname tunnel.generativestuff.com "$@";}
-alias ccat='pygmentize -g'
+function tmx() {
+  SESSIONFOLDER="~/.tmuxSessions/"
+  echo $SESSIONFOLDER;
+
+  set -e
+
+  if [ -z "$1" ]; then
+    SESSION="${PWD##*/}"
+  else
+    SESSION="$1"
+  fi
+
+  _safe_window() {
+    if [ -x "$2" ]; then
+      tmux new-window -n "$1" -t "$SESSION"
+      tmux send-keys "$2" C-m
+    fi
+  }
+
+  if ! (tmux has-session -t "$SESSION" >/dev/null 2>&1); then
+    if [ -d "$PROJECTSFOLDER"/"$SESSION" ]; then
+      cd "$PROJECTSFOLDER"/"$SESSION"
+    fi
+
+    if [ -x "$PWD"/.tmux ]; then
+      "$PWD"/.tmux "$SESSION"
+    else
+      tmux new-session -s "$SESSION" -n main -d
+      # tmux send-keys "$EDITOR" C-m #':CtrlP' C-m
+      # tmux new-window -n shell -t "$SESSION"
+      # _safe_window console script/console
+      # _safe_window server script/server
+      #
+      # tmux select-window -t "$SESSION":1
+    fi
+  fi
+
+  if [ -z "$TMUX" ]; then
+    tmux attach -t "$SESSION"
+  else
+    tmux switch-client -t "$SESSION"
+  fi
+}
